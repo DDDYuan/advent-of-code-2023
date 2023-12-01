@@ -10,7 +10,6 @@ target
 .ensime
 .ensime_cache/
 tags
-.idea
 tmp
 atlas_thin
 .bloop
