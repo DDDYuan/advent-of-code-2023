@@ -2,8 +2,8 @@ import scala.io.Source
 
 trait GenericPuzzle(file: String):
   private def load: List[String] = Source.fromResource(file).getLines().toList
-  def part1(input: List[String]): String = "Not implemented"
-  def part2(input: List[String]): String = "Not implemented"
+  def part1(input: List[String]): String
+  def part2(input: List[String]): String
 
   def solve(): Unit =
     val input = load
