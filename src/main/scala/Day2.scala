@@ -1,9 +1,7 @@
 import scala.io.Source
 import scala.language.postfixOps
 
-object Day2:
-  private def load: List[String] = Source.fromResource("day2.csv").getLines().toList
-
+object Day2 extends GenericPuzzle("day2.csv"):
   private def toCubeCount(cube: String): (Int, Int, Int) =
     var red = 0
     var green = 0
@@ -17,7 +15,6 @@ object Day2:
         case _                        => ()
     )
     (red, green, blue)
-
   private def toStructured(raw: String): (Int, Int, Int, Int) =
     val splited = raw.split(": ")
     val game = splited(0)
@@ -36,10 +33,7 @@ object Day2:
     val result = (id, maxRed, maxGreen, maxBlue)
     result
 
-  def part1: String =
-    val input = load
-    input.map(toStructured).filter(x => x._2 <= 12 && x._3 <= 13 && x._4 <= 14).map(x => x._1).sum.toString
-
-  def part2: String =
-    val input = load
-    input.map(toStructured).map(x => x._2 * x._3 * x._4).sum.toString
+  private val prepare = (input: List[String]) => input.map(toStructured)
+  override def part1(input: List[String]): String =
+    prepare(input).filter(x => x._2 <= 12 && x._3 <= 13 && x._4 <= 14).map(x => x._1).sum.toString
+  override def part2(input: List[String]): String = prepare(input).map(x => x._2 * x._3 * x._4).sum.toString
