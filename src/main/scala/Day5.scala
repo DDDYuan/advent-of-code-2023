@@ -51,7 +51,7 @@ object Day5 extends GenericPuzzle("day5.csv"):
   ): BigInt =
     val seed = toSeed(location, maps)
     if seeds.exists(_.contains(seed)) then location else findSeed(location + 1, maps, seeds)
-  override def part1(input: List[String]): String = ""
+  override def part1(input: List[String]): String =
     val maps = toMaps(input)
     val seeds = getSeeds(input.head)
     findSeed(0, maps, seeds.map(x => x until x + 1)).toString
