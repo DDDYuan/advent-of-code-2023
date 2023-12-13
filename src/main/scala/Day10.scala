@@ -18,10 +18,10 @@ object Day10 extends GenericPuzzle("day10.csv"):
     case ('F', Direction.DOWN)  => Direction.LEFT
     case ('F', Direction.RIGHT) => Direction.UP
   private def getNextPosition(current: (Int, Int), from: Direction) = from match
-    case Direction.LEFT => (current._1, current._2 + 1)
+    case Direction.LEFT  => (current._1, current._2 + 1)
     case Direction.RIGHT => (current._1, current._2 - 1)
-    case Direction.UP => (current._1 + 1, current._2)
-    case Direction.DOWN => (current._1 - 1, current._2)
+    case Direction.UP    => (current._1 + 1, current._2)
+    case Direction.DOWN  => (current._1 - 1, current._2)
   private def findStart(map: List[List[Char]]) =
     val x = map.zipWithIndex.find(_._1.contains('S')).get._2
     val y = map(x).indexOf('S')
@@ -32,9 +32,10 @@ object Day10 extends GenericPuzzle("day10.csv"):
     val nextChar = map(nextPosition._1)(nextPosition._2)
     (nextPosition, nextChar, nextFromDirection)
   private def toMap(raw: List[String]) = raw.map(_.toCharArray.toList)
-  private val START_BLOCK = 'L'
-  private val START_FROM = Direction.UP
-  override def part1(input: List[String]): String =
+  private val START_BLOCK = 'F'
+  private val START_FROM = Direction.DOWN
+
+  private def getPath(input: List[String]) =
     val rawMap = toMap(input)
     val map = rawMap.map(_.map(x => if x == 'S' then START_BLOCK else x))
     val start = findStart(rawMap)
@@ -43,6 +44,10 @@ object Day10 extends GenericPuzzle("day10.csv"):
     while current._1 != start do
       current = findNext(current, map)
       path = path.appended(current)
-    println(path)
+    path
+  override def part1(input: List[String]): String =
+    val path = getPath(input)
     (path.size / 2).toString
-  override def part2(input: List[String]): String = ""
+  override def part2(input: List[String]): String =
+    val path = getPath(input)
+    ""
