@@ -32,8 +32,8 @@ object Day10 extends GenericPuzzle("day10.csv"):
     val nextChar = map(nextPosition._1)(nextPosition._2)
     (nextPosition, nextChar, nextFromDirection)
   private def toMap(raw: List[String]) = raw.map(_.toCharArray.toList)
-  private val START_BLOCK = 'F'
-  private val START_FROM = Direction.DOWN
+  private val START_BLOCK = 'L'
+  private val START_FROM = Direction.UP
 
   private def getPath(input: List[String]) =
     val rawMap = toMap(input)
@@ -45,9 +45,38 @@ object Day10 extends GenericPuzzle("day10.csv"):
       current = findNext(current, map)
       path = path.appended(current)
     path
+  private def calculateWallCounts(walls: List[Char]) =
+    var counts = walls.count(_ == '|')
+    val others = walls.filter(_ != '|')
+    others
+      .sliding(2, 2)
+      .foreach(x =>
+        (x.head, x.last) match
+          case ('L', 'J') => counts = counts + 2
+          case ('L', '7') => counts = counts + 1
+          case ('F', 'J') => counts = counts + 1
+          case ('F', '7') => counts = counts + 2
+      )
+    counts
+  private def isGroundEnclosed(ground: (Int, Int), path: List[((Int, Int), Char, Direction)]) =
+    calculateWallCounts(
+      path
+        .filter(_._1._1 == ground._1)
+        .filter(_._1._2 < ground._2)
+        .sortBy(_._1._2)
+        .map(_._2)
+        .filter(_ != '-')
+        .map(x => if x == 'S' then START_BLOCK else x)
+    ) % 2 == 1
+
   override def part1(input: List[String]): String =
     val path = getPath(input)
     (path.size / 2).toString
   override def part2(input: List[String]): String =
     val path = getPath(input)
-    ""
+    val tilesPositions = path.map(_._1)
+    val otherTiles = (for
+      x <- input.indices
+      y <- input.head.toCharArray.indices
+    yield (x, y)).filter(!tilesPositions.contains(_))
+    otherTiles.count(isGroundEnclosed(_, path)).toString
