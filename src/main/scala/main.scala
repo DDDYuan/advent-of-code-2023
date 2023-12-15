@@ -1,4 +1,4 @@
 @main
 def main(): Unit =
-  val runPuzzle = Day10
+  val runPuzzle = Day11
   runPuzzle.solve()
